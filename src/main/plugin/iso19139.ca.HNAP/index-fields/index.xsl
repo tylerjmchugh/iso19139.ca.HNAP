@@ -384,11 +384,15 @@
 
 
         <xsl:for-each select="$overviews">
+          <xsl:variable name="lang" select="substring-before(substring-after(../../../@xlink:role, 'urn:xml:lang:'), '-')"/>
           <!-- TODO can be multilingual desc and name -->
           <overview type="object">{
             "url": "<xsl:value-of select="normalize-space(.)"/>"
             <xsl:if test="normalize-space(../../gmd:fileDescription) != ''">,
               "nameObject": <xsl:value-of select="gn-fn-index:add-multilingual-field('name', ../../gmd:fileDescription, $allLanguages, true())"/>
+            </xsl:if>
+            <xsl:if test="$lang">,
+              "lang": "<xsl:value-of select="if ($lang = 'fra') then 'fre' else $lang"/>"
             </xsl:if>
             }</overview>
         </xsl:for-each>
